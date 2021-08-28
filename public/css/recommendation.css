@@ -1,0 +1,17 @@
+.recipe {
+  margin: 10px 10%;
+  max-width: 80%;
+}
+
+h5 {
+  color: #6ab446;
+}
+
+#image {
+  justify-content: center;
+  align-items: center;
+  -ms-align-items: center;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+}

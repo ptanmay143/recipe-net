@@ -1,0 +1,23 @@
+extends default
+block stylesheets
+    link(rel='stylesheet' type='text/css' href='/css/recommendation.css')
+block content
+    .recipe
+        .row
+            .card.col-sm
+                .card-body
+                    h1.card-title #{recipe.title}
+                    .ingredients
+                        h2.card-text Ingredients:
+                        ol
+                        each item in recipe.ingredients
+                            li #{item}
+                    .instructions
+                        h2.card-text Instructions:
+                        ol
+                        each item in recipe.instructions
+                            li #{item}
+                    br
+                    a.btn.btn-primary(href=recipe.url) Read more about this recipe...
+            .card.col
+                img.card-img-top#image(src=recipe.photo)

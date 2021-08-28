@@ -1,0 +1,14 @@
+extends default
+block stylesheets
+    link(rel='stylesheet' type='text/css' href='/css/tool.css')
+block scripts
+    script(src='/js/tool.js')
+block content
+    .description
+        h1 Welcome to RecipeNet
+        p RecipeNet is a recommendation system that recommends the closest recipe that a user can cook using the ingredients he has in his pantry.
+        p We need you to enter the ingredients that the user has in his pantry.
+        select.js-example-basic-multiple(name="ingredients-selector" multiple='multiple')
+        br
+        br
+        button.btn.btn-success#get-recommendation Get recommendation!
