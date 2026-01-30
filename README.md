@@ -2,7 +2,7 @@
 
 > Find recipes based on ingredients you have at home
 
-RecipeNet is a web application that recommends recipes using machine learning. Select your available ingredients from a dropdown, and the system finds the best matching recipe using TF-IDF vectorization and cosine similarity.
+A web application that recommends recipes using machine learning. Select your available ingredients from a dropdown, and the system finds the best matching recipe using TF-IDF vectorization and cosine similarity.
 
 ## Usage
 
@@ -24,7 +24,7 @@ Open `http://localhost:9876` in your browser:
 ```
 User selects: tomato, basil, garlic, olive oil
          ↓
-System matches against 5000+ recipes
+System matches against recipe database
          ↓
 Returns: "Tomato Basil Pasta" with full details
 ```
@@ -70,7 +70,7 @@ Visit `http://localhost:9876` to use the application.
 
 **`GET /tool`**
 - Returns the ingredient selection page
-- Dropdown populated with ~5000 ingredients from corpus
+- Dropdown populated with ingredients from corpus (2000+ unique ingredients)
 
 **`GET /recommendation?input=<ids>`**
 - Returns recipe recommendation page
@@ -135,20 +135,16 @@ app.listen(9876);  // Change this number
 # Using pm2
 npm install -g pm2
 pm2 start server.js --name recipe-net
-
-# Using Docker
-docker build -t recipe-net .
-docker run -p 9876:9876 recipe-net
 ```
 
 ## Development
 
 ### Code Structure
 
-- `server.js` (37 lines) - Express server with 3 routes
-- `py-data-preprocess.py` (62 lines) - Extract and normalize ingredients
-- `py-calculate-tf-idf.py` (47 lines) - Compute TF-IDF vectors
-- `py-calculate-similarity.py` (48 lines) - Calculate cosine similarity
+- `server.js` - Express server with 3 routes
+- `py-data-preprocess.py` - Extract and normalize ingredients
+- `py-calculate-tf-idf.py` - Compute TF-IDF vectors
+- `py-calculate-similarity.py` - Calculate cosine similarity
 - `views/` - Pug templates for frontend
 - `public/` - Static assets
 
@@ -156,8 +152,7 @@ docker run -p 9876:9876 recipe-net
 
 **Node.js:**
 - express - Web framework
-- pug - Template engine  
-- body-parser - Request parsing
+- pug - Template engine
 
 **Python:**
 - scikit-learn - TF-IDF and cosine similarity
