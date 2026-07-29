@@ -1,205 +1,297 @@
-# recipe-net
+<h1 align="center">
+   <a href="https://github.com/ptanmay143/recipe-net">
+      <img src="docs/images/logo.svg" alt="Logo" width="100" height="100">
+   </a>
+</h1>
 
-> Find recipes based on ingredients you have at home
+<div align="center">
+   Recipe Net
+   <br />
+   <a href="#about"><strong>Explore the screenshots »</strong></a>
+   <br />
+   <br />
+   <a href="https://github.com/ptanmay143/recipe-net/issues/new?assignees=&labels=bug&template=01_BUG_REPORT.md&title=bug%3A+">Report a Bug</a>
+   ·
+   <a href="https://github.com/ptanmay143/recipe-net/issues/new?assignees=&labels=enhancement&template=02_FEATURE_REQUEST.md&title=feat%3A+">Request a Feature</a>
+   ·
+   <a href="https://github.com/ptanmay143/recipe-net/issues/new?assignees=&labels=question&template=04_SUPPORT_QUESTION.md&title=support%3A+">Ask a Question</a>
+</div>
 
-A web application that recommends recipes using machine learning. Select your available ingredients from a dropdown, and the system finds the best matching recipe using TF-IDF vectorization and cosine similarity.
+<div align="center">
+<br />
+
+[![Project license](https://img.shields.io/github/license/ptanmay143/recipe-net.svg?style=flat-square)](LICENSE)
+[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/ptanmay143/recipe-net/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
+[![code with love by ptanmay143](https://img.shields.io/badge/%3C%2F%3E%20with%20%E2%99%A5%20by-ptanmay143-ff1414.svg?style=flat-square)](https://github.com/ptanmay143)
+
+</div>
+
+<details open="open">
+<summary>Table of Contents</summary>
+
+- [About](#about)
+  - [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+- [Usage](#usage)
+- [Roadmap](#roadmap)
+- [Support](#support)
+- [Project Assistance](#project-assistance)
+- [Contributing](#contributing)
+- [Authors & contributors](#authors--contributors)
+- [Security](#security)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+</details>
+
+---
+
+## About
+
+Recipe Net is an ingredient-driven recipe recommendation web application. Instead of searching by dish name, users choose ingredients they currently have, and the system ranks recipes based on semantic similarity between selected ingredients and a preprocessed recipe corpus.
+
+The application targets practical cooking discovery with minimal interaction complexity: open the site, pick ingredients, and receive one high-confidence recommended recipe including title, ingredient list, instructions, and image.
+
+At runtime, the Node.js/Express server handles page routing and orchestrates recommendation requests. For each recommendation call, it executes a Python similarity script (`py-calculate-similarity.py`) that loads previously generated TF-IDF artifacts and computes cosine similarity against all recipe vectors.
+
+The recommendation quality depends on a preprocessing pipeline that converts raw Cookstr data into normalized ingredients (`cookstr-data.json`), corpus mapping (`cookstr-corpus.json`), and serialized vectorization assets (`tf_idf.pickle`, `tf_idf_matrix.pickle`). This batch step is intended as one-time setup or refresh whenever source data changes.
+
+<details>
+<summary>Screenshots</summary>
+<br>
+
+Add screenshots under `docs/images/` and update this table for visual documentation.
+
+|                               Home Page                               |                               Recommendation                               |
+| :-------------------------------------------------------------------: | :------------------------------------------------------------------------: |
+| <img src="docs/images/screenshot.png" title="Home Page" width="100%"> | <img src="docs/images/screenshot.png" title="Recommendation" width="100%"> |
+
+</details>
+
+### Built With
+
+- **Node.js + Express** — web server and route handling.
+- **Pug** — server-side templating for `index`, `tool`, and `recommendation` views.
+- **Python 3** — data preprocessing and similarity scoring scripts.
+- **scikit-learn** — TF-IDF vectorization and cosine similarity.
+- **NumPy** — argmax selection of top similarity result.
+- **Bootstrap / jQuery / Select2** — front-end styling and ingredient selection UI.
+
+---
+
+## Getting Started
+
+Setup includes both JavaScript and Python dependencies plus one-time data artifact generation. Once artifacts exist, normal development requires only starting the Node server.
+
+### Prerequisites
+
+- **Node.js** — compatible with this project’s dependency set (`express@4`, `pug@3`, `body-parser@1`).
+- **Python 3** — required for preprocessing and runtime recommendation scripts.
+- **pip** — to install `scikit-learn`.
+- **Cookstr raw dataset file** — `data/cookstr-recipes.json` is expected by preprocessing script.
+
+### Installation
+
+1. Clone the repository.
+
+```bash
+git clone https://github.com/ptanmay143/recipe-net.git
+```
+
+2. Enter the project folder.
+
+```bash
+cd recipe-net
+```
+
+3. Install Node dependencies.
+
+```bash
+npm install
+```
+
+4. Install Python dependencies.
+
+```bash
+pip install -r requirements.txt
+```
+
+5. Place raw data file.
+
+```text
+Expected path: data/cookstr-recipes.json
+```
+
+6. Generate processed dataset and corpus.
+
+```bash
+python py-data-preprocess.py
+```
+
+7. Generate TF-IDF artifacts.
+
+```bash
+python py-calculate-tf-idf.py
+```
+
+8. Start the web server.
+
+```bash
+npm start
+```
+
+9. Verify setup.
+
+```text
+Open http://localhost:9876 and navigate to /tool, select ingredients,
+then confirm recommendation page renders recipe details.
+```
+
+### Environment Variables
+
+No environment variables are read in current source.
+
+| Variable | Required | Default | Description                                         | Example Value |
+| -------- | -------- | ------- | --------------------------------------------------- | ------------- |
+| None     | No       | N/A     | Configuration currently uses hard-coded paths/port. | N/A           |
+
+---
 
 ## Usage
 
-**Quick Start:**
+Start server:
 
 ```bash
 npm start
-# Server listening on port 9876
 ```
 
-Open `http://localhost:9876` in your browser:
+Open application:
 
-1. Click "Go to Tool"
-2. Select ingredients from the dropdown (e.g., tomato, basil, garlic)
-3. Click "Get Recommendation!"
-4. View the best matching recipe with ingredients, instructions, and photo
-
-**Example:**
-```
-User selects: tomato, basil, garlic, olive oil
-         ↓
-System matches against recipe database
-         ↓
-Returns: "Tomato Basil Pasta" with full details
+```text
+http://localhost:9876
 ```
 
-## Installation
+Important user-facing routes:
 
-**Prerequisites:**
-- Node.js 12+
-- Python 3.6+
-- Git
+- `GET /` — landing page.
+- `GET /tool` — ingredient selection interface.
+- `GET /recommendation?input=<comma-separated-ingredient-ids>` — renders selected best-match recipe.
 
-**Steps:**
+Example recommendation request:
+
+```text
+GET /recommendation?input=0,5,10
+```
+
+Pipeline command usage examples:
 
 ```bash
-# Clone repository
-git clone https://github.com/ptanmay143/recipe-net.git
-cd recipe-net
-
-# Install dependencies
-npm install
-pip install -r requirements.txt
-
-# Obtain the CookStr dataset
-# Place the dataset at: data/cookstr-recipes.json
-# (Publicly available from research sources)
-
-# Process the data (one-time setup)
 python py-data-preprocess.py
 python py-calculate-tf-idf.py
-
-# Start the server
-npm start
+python py-calculate-similarity.py 0,5,10
 ```
 
-Visit `http://localhost:9876` to use the application.
+Expected similarity script output:
 
-## API
-
-### Routes
-
-**`GET /`**
-- Returns the home page
-
-**`GET /tool`**
-- Returns the ingredient selection page
-- Dropdown populated with ingredients from corpus (2000+ unique ingredients)
-
-**`GET /recommendation?input=<ids>`**
-- Returns recipe recommendation page
-- Parameters:
-  - `input` (string): Comma-separated ingredient IDs (e.g., "0,5,12")
-- Spawns Python subprocess to compute similarity
-- Renders recipe with title, ingredients, instructions, and photo
-
-### Python Scripts
-
-**`py-data-preprocess.py`**
-- Reads `data/cookstr-recipes.json`
-- Extracts and normalizes ingredients
-- Outputs: `cookstr-data.json`, `cookstr-corpus.json`
-
-**`py-calculate-tf-idf.py`**
-- Vectorizes recipes using TF-IDF
-- Outputs: `tf_idf.pickle`, `tf_idf_matrix.pickle`
-
-**`py-calculate-similarity.py <ingredient_ids>`**
-- Takes comma-separated ingredient IDs as argument
-- Computes cosine similarity with all recipes
-- Returns recipe ID with highest similarity score
-
-## How It Works
-
-The system uses a three-layer architecture:
-
-1. **Browser Frontend** (Pug templates + Bootstrap)
-   - Multi-select dropdown for ingredient selection
-   - Sends selected ingredient IDs to server
-
-2. **Express Server** (Node.js)
-   - Serves web pages
-   - Spawns Python subprocess for similarity computation
-   - Looks up and renders recipe details
-
-3. **ML Pipeline** (Python + scikit-learn)
-   - Loads pre-computed TF-IDF vectors
-   - Calculates cosine similarity between user ingredients and recipes
-   - Returns best matching recipe ID
-
-**Algorithm:** Given user ingredient selections, compute cosine similarity between user ingredient vector and pre-computed recipe ingredient vectors to identify the best matching recipe.
-
-## Background
-
-RecipeNet was created to solve a common problem: "What can I cook with the ingredients I have?" Traditional recipe search requires knowing what dish you want to make. This system flips that approach by starting with ingredients and finding the best matching recipes.
-
-The system uses **TF-IDF (Term Frequency-Inverse Document Frequency)** to represent recipes as vectors in ingredient space, then uses **cosine similarity** to find recipes that best match the user's available ingredients. This approach is computationally efficient and provides good results for ingredient-based matching.
-
-## Configuration
-
-**Server Port:** Default is 9876. Change in `server.js`:
-```javascript
-app.listen(9876);  // Change this number
+```text
+A zero-padded 4-digit recipe ID (e.g., 0123)
 ```
 
-**Data Directory:** Default is `./data/`. Update paths in Python scripts and `server.js` if needed.
+Runtime data flow:
 
-**Production Deployment:**
-```bash
-# Using pm2
-npm install -g pm2
-pm2 start server.js --name recipe-net
+```text
+Browser ingredient IDs -> Express /recommendation -> spawnSync Python script
+-> cosine similarity against TF-IDF matrix -> best recipe ID -> lookup in cookstr-data.json
+-> render recommendation.pug
 ```
 
-## Development
+Operational notes:
 
-### Code Structure
+- Server listens on port `9876` (`app.listen(9876)`).
+- Recommendation endpoint uses shell-enabled child process invocation.
+- Output parsing currently slices first 4 characters, implying an implicit recipe ID formatting assumption.
 
-- `server.js` - Express server with 3 routes
-- `py-data-preprocess.py` - Extract and normalize ingredients
-- `py-calculate-tf-idf.py` - Compute TF-IDF vectors
-- `py-calculate-similarity.py` - Calculate cosine similarity
-- `views/` - Pug templates for frontend
-- `public/` - Static assets
+---
 
-### Dependencies
+## Roadmap
 
-**Node.js:**
-- express - Web framework
-- pug - Template engine
+See the [open issues](https://github.com/ptanmay143/recipe-net/issues) for a full list of proposed features and known bugs.
 
-**Python:**
-- scikit-learn - TF-IDF and cosine similarity
+- [Top Feature Requests](https://github.com/ptanmay143/recipe-net/issues?q=label%3Aenhancement+is%3Aopen+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
+- [Top Bugs](https://github.com/ptanmay143/recipe-net/issues?q=is%3Aissue+is%3Aopen+label%3Abug+sort%3Areactions-%2B1-desc) (Add your votes using the 👍 reaction)
+- [Newest Bugs](https://github.com/ptanmay143/recipe-net/issues?q=is%3Aopen+is%3Aissue+label%3Abug)
 
-**Frontend (CDN):**
-- Bootstrap 4.4.1
-- jQuery 3.4.1
-- Select2 4.0.13
+Likely next improvements include input validation and safer process invocation for `/recommendation`, performance optimization to avoid per-request Python process spawning, and richer recommendation outputs (top-N results rather than single best match).
 
-### Testing
+---
 
-```bash
-# Test data preprocessing
-python py-data-preprocess.py
-# Verify: cookstr-data.json and cookstr-corpus.json created
+## Support
 
-# Test TF-IDF computation
-python py-calculate-tf-idf.py
-# Verify: tf_idf.pickle and tf_idf_matrix.pickle created
+Reach out to the maintainer at one of the following places:
 
-# Test similarity calculation
-python py-calculate-similarity.py "0,5,10"
-# Expected: 4-digit recipe ID
+- [GitHub issues](https://github.com/ptanmay143/recipe-net/issues/new?assignees=&labels=question&template=04_SUPPORT_QUESTION.md&title=support%3A+)
+- Contact options listed on [this GitHub profile](https://github.com/ptanmay143)
 
-# Test web server
-npm start
-# Open http://localhost:9876
-```
+---
 
-## Known Issues
+## Project Assistance
 
-- **Security:** Command injection risk in subprocess spawning (needs input validation)
-- **Performance:** Spawns Python process per request (consider caching or microservice)
-- **Limitation:** Output parsing assumes recipe ID < 10000
-- **Error handling:** Minimal validation and error messages
+If you want to say **thank you** or support active development of Recipe Net:
 
-See [Issues](https://github.com/ptanmay143/recipe-net/issues) for planned improvements.
+- Add a [GitHub Star](https://github.com/ptanmay143/recipe-net) to the project.
+- Share benchmark results or dataset improvements with maintainers.
+- Publish usage demos showing real ingredient-to-recipe scenarios.
+
+Together, we can make Recipe Net **better**!
+
+---
 
 ## Contributing
 
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature-name`
-3. Make changes and test with `npm start`
-4. Submit pull request
+First off, thanks for taking the time to contribute! Contributions are what make the open-source community such an amazing place to learn, inspire, and create.
+
+Recommended workflow:
+
+1. Fork and create a feature branch.
+2. Apply focused changes to either server, preprocessing, or UI layers.
+3. Rebuild data artifacts if your change impacts corpus/vectorization.
+4. Validate route behavior locally.
+5. Open a pull request with reproducible steps.
+
+No dedicated `docs/CONTRIBUTING.md` is currently present.
+
+---
+
+## Authors & Contributors
+
+The original setup of this repository is by [Tanmay Pachpande](https://github.com/ptanmay143).
+
+For a full list of all authors and contributors, see [the contributors page](https://github.com/ptanmay143/recipe-net/contributors).
+
+---
+
+## Security
+
+Recipe Net follows good practices of security, but 100% security cannot be assured. Recipe Net is provided **"as is"** without any **warranty**. Use at your own risk.
+
+Known security-sensitive area in current implementation: `/recommendation` uses shell-enabled process execution with user-provided query input; validate and sanitize before production exposure.
+
+---
 
 ## License
 
-MIT © Tanmay Pachpande
+This project is licensed under the **MIT License**.
 
-See [LICENSE](LICENSE) file for details.
+See [LICENSE](LICENSE) for more information.
+
+---
+
+## Acknowledgements
+
+- scikit-learn community for mature text vectorization tooling.
+- Express and Pug maintainers for simple full-stack web composition.
+- Cookstr data source and open recipe-data ecosystem.
+
+<!-- Generated by README_GENERATOR_PROMPT v0.1 -->

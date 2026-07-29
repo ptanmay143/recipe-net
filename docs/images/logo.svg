@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Recipe Net logo">
+  <defs>
+    <linearGradient id="icon-gradient" x1="48" y1="48" x2="208" y2="208" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#06B6D4"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="256" height="256" rx="52" fill="#F8FAFC"/>
+  <rect x="28" y="28" width="200" height="200" rx="44" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2"/>
+
+  <g fill="none" stroke="url(#icon-gradient)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M76 150c7 25 27 42 52 42s45-17 52-42"/>
+    <path d="M90 160h76"/>
+    <path d="M128 150v-20"/>
+    <path d="M128 130L96 104" opacity="0.9"/>
+    <path d="M128 130L160 104" opacity="0.9"/>
+  </g>
+
+  <circle cx="96" cy="104" r="10" fill="#4F46E5"/>
+  <circle cx="160" cy="104" r="10" fill="#4F46E5"/>
+  <circle cx="128" cy="130" r="11" fill="#06B6D4"/>
+  <circle cx="128" cy="86" r="9" fill="#06B6D4"/>
+
+  <path d="M128 121V95" fill="none" stroke="url(#icon-gradient)" stroke-width="10" stroke-linecap="round"/>
+</svg>
